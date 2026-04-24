@@ -21,20 +21,25 @@ jobs:
       - name: Build Project (Maven)
         run: mvn clean package
 
-      - name: Stop Tomcat (safe CMD)
+      # ---------------- STOP TOMCAT (SAFE) ----------------
+      - name: Stop Tomcat (safe)
         shell: cmd
-        run: net stop Tomcat10 || echo Tomcat already stopped
+        continue-on-error: true
+        run: net stop Tomcat10
 
+      # ---------------- CLEAN OLD DEPLOYMENT ----------------
       - name: Clean old deployment
         shell: cmd
         run: |
           del /Q "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\Project.war" || echo No WAR found
           rmdir /S /Q "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\Project" || echo No folder found
 
+      # ---------------- DEPLOY NEW WAR ----------------
       - name: Deploy WAR to Tomcat
         shell: cmd
         run: copy target\*.war "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\Project.war"
 
+      # ---------------- START TOMCAT ----------------
       - name: Start Tomcat
         shell: cmd
         run: net start Tomcat10
