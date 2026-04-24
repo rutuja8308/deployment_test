@@ -1,4 +1,4 @@
-name: Build WAR File
+name: Build and Deploy
 
 on:
   push:
@@ -6,23 +6,31 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Setup Java 21
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build using Maven
+      - name: Build WAR
         run: mvn clean package
 
-      - name: Upload WAR Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: my-war-file
-          path: target/*.war
+      - name: Rename WAR
+        run: |
+          if exist target\Project-0.0.1-SNAPSHOT.war (
+            rename target\Project-0.0.1-SNAPSHOT.war Project.war
+          )
+
+      - name: Deploy to Tomcat
+        run: copy target\Project.war "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\"
+
+      - name: Restart Tomcat
+        run: |
+          net stop Tomcat10
+          net start Tomcat10
