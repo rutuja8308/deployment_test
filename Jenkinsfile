@@ -30,10 +30,5 @@ pipeline {
             }
         }
 
-        stage('Start Tomcat') {
-            steps {
-                bat 'net start Tomcat10 || echo "Tomcat already running"'
-            }
-        }
     }
 }
