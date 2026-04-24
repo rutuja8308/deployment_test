@@ -1,0 +1,28 @@
+name: Build WAR File
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build using Maven
+        run: mvn clean package
+
+      - name: Upload WAR Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-war-file
+          path: target/*.war
