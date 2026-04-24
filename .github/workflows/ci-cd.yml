@@ -18,20 +18,23 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Build Project using Maven
+      - name: Build Project (Maven)
         run: mvn clean package
 
-      - name: Stop Tomcat (safe)
-        run: |
-          net stop Tomcat10 || echo "Tomcat already stopped"
+      - name: Stop Tomcat (safe CMD)
+        shell: cmd
+        run: net stop Tomcat10 || echo Tomcat already stopped
 
       - name: Clean old deployment
+        shell: cmd
         run: |
-          del /Q "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\Project.war" || echo "No old WAR found"
-          rmdir /S /Q "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\Project" || echo "No old folder found"
+          del /Q "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\Project.war" || echo No WAR found
+          rmdir /S /Q "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\Project" || echo No folder found
 
       - name: Deploy WAR to Tomcat
+        shell: cmd
         run: copy target\*.war "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\Project.war"
 
       - name: Start Tomcat
+        shell: cmd
         run: net start Tomcat10
