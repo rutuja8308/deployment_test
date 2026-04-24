@@ -9,6 +9,6 @@ public class HomeController
 	@GetMapping("/home")
 	public String home()
 	{
-		return "Deployment is done ! Updated";
+		return "Deployment is done ! Updated once";
 	}
 }
