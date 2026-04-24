@@ -21,14 +21,8 @@ jobs:
       - name: Build WAR
         run: mvn clean package
 
-      - name: Rename WAR
-        run: |
-          if exist target\Project-0.0.1-SNAPSHOT.war (
-            rename target\Project-0.0.1-SNAPSHOT.war Project.war
-          )
-
       - name: Deploy to Tomcat
-        run: copy target\Project.war "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\"
+        run: copy target\*.war "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\"
 
       - name: Restart Tomcat
         run: |
