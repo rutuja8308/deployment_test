@@ -10,10 +10,10 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
@@ -23,8 +23,3 @@ jobs:
 
       - name: Deploy to Tomcat
         run: copy target\*.war "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\"
-
-      - name: Restart Tomcat
-        run: |
-          net stop Tomcat10
-          net start Tomcat10
