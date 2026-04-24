@@ -9,10 +9,11 @@ pipeline {
     stages {
 
         stage('Checkout') {
-            steps {
-                git 'https://github.com/rutuja8308/deployment_test.git'
-            }
-        }
+    steps {
+        git branch: 'main',
+            url: 'https://github.com/rutuja8308/deployment_test.git'
+    	  }
+		}
 
         stage('Build') {
             steps {
