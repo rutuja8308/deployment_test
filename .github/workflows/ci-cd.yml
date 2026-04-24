@@ -1,0 +1,25 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Build WAR
+        run: mvn clean package
+
+      - name: Deploy to Tomcat
+        run: copy target\*.war "C:\Program Files\Apache Software Foundation\Tomcat 10.1\webapps\"
