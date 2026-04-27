@@ -18,31 +18,39 @@ pipeline {
             }
         }
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
                 git branch: "${params.BRANCH_NAME}",
                     url: 'https://github.com/rutuja8308/deployment_test.git'
             }
         }
 
-        stage('Build WAR') {
+        stage('Verify Branch') {
             steps {
-                bat 'mvn clean package -DskipTests'
+                bat 'git branch'
+                bat 'git log -1'
             }
         }
 
-        stage('Deploy to Tomcat') {
+        stage('Build') {
+            steps {
+                bat 'mvn clean package -DskipTests -U'
+            }
+        }
+
+        stage('Deploy') {
             steps {
                 bat '''
-                echo ===== Removing old deployment =====
-                del /f /q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\Project.war" || echo No old WAR
-                rmdir /s /q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\Project" || echo No old folder
+                net stop Tomcat10
 
-                echo ===== Copying new WAR =====
+                rmdir /s /q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\Project"
+                del /f /q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\Project.war"
+
                 xcopy "%WORKSPACE%\\target\\Project.war" "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\" /Y
+
+                net start Tomcat10
                 '''
             }
         }
-
     }
 }
