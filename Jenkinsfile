@@ -25,9 +25,21 @@ pipeline {
             }
         }
 
-        stage('Build WAR') {
+        stage('Build') {
             steps {
-                bat 'mvn clean package -DskipTests -U'
+                bat 'mvn clean compile -U'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'mvn test'
+            }
+        }
+
+        stage('Package WAR') {
+            steps {
+                bat 'mvn package -DskipTests'
             }
         }
 
