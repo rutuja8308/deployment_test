@@ -25,18 +25,6 @@ pipeline {
             }
         }
 
-        stage('Verify Code') {
-            steps {
-                bat 'echo ===== CURRENT BRANCH ====='
-                bat 'git rev-parse --abbrev-ref HEAD'
-
-                bat 'echo ===== LATEST COMMIT ====='
-                bat 'git log -1 --oneline'
-
-                bat 'echo ===== FILE LIST ====='
-                bat 'dir'
-            }
-        }
 
         stage('Build WAR') {
             steps {
